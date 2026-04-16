@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOFT — Menu</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #9A6E2A;
+    --gold-light: #B8892E;
+    --veg-green: #2E7D32;
+    --nonveg-brown: #8B2500;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #F7F4EF;
+    color: #2C2416;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #FFFFFF;
+    border-bottom: 1px solid rgba(154,110,42,0.15);
+    padding: 0 24px;
+    box-shadow: 0 1px 12px rgba(0,0,0,0.06);
+  }
+
+  .header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+  }
+
+  .logo-area { display: flex; align-items: center; gap: 14px; }
+
+  .logo-box {
+    width: 52px; height: 52px;
+    border: 1.5px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+
+  .logo-box::before {
+    content: ''; position: absolute; inset: 3px;
+    border: 0.5px solid rgba(154,110,42,0.25);
+  }
+
+  .logo-text-main {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 600;
+    letter-spacing: 6px; color: var(--gold); line-height: 1;
+  }
+
+  .header-tagline { font-size: 10px; letter-spacing: 3px; color: #9A9080; text-transform: uppercase; }
+
+  .nav-tabs {
+    background: #FFFFFF;
+    border-bottom: 1px solid rgba(154,110,42,0.12);
+    overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none;
+    position: sticky; top: 72px; z-index: 99;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+
+  .nav-inner {
+    max-width: 960px; margin: 0 auto;
+    display: flex; padding: 0 24px; gap: 0; min-width: max-content;
+  }
+
+  .nav-tab {
+    padding: 14px 20px; font-size: 10px; letter-spacing: 2.5px;
+    text-transform: uppercase; color: #9A9080; font-weight: 500;
+    cursor: pointer; white-space: nowrap;
+    border-bottom: 2px solid transparent; transition: all 0.2s;
+    background: none; border-left: none; border-right: none; border-top: none;
+  }
+  .nav-tab:hover { color: var(--gold); }
+  .nav-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  main { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .section-header {
+    margin-bottom: 32px; padding-bottom: 20px;
+    border-bottom: 1px solid rgba(154,110,42,0.12); display: none;
+  }
+  .section-header.active { display: block; }
+
+  .section-eyebrow { font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: 40px; font-weight: 300; color: #1A1208; letter-spacing: 1px; line-height: 1; }
+  .section-note { margin-top: 12px; font-size: 11px; color: #7A6E5E; letter-spacing: 1px; }
+
+  .bread-options { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .bread-pill {
+    background: rgba(154,110,42,0.06); border: 1px solid rgba(154,110,42,0.2);
+    padding: 4px 12px; font-size: 9px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gold); border-radius: 2px;
+  }
+
+  .menu-section { display: none; }
+  .menu-section.active { display: block; }
+
+  .menu-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 2px; margin-bottom: 40px;
+  }
+  @media (max-width: 600px) { .menu-grid { grid-template-columns: 1fr; } }
+
+  .menu-item {
+    background: #FFFFFF; padding: 22px 24px;
+    border: 1px solid rgba(0,0,0,0.06);
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    cursor: default; position: relative; overflow: hidden;
+  }
+  .menu-item:hover {
+    background: #FDFCF9; border-color: rgba(154,110,42,0.2);
+    box-shadow: 0 2px 12px rgba(154,110,42,0.08);
+  }
+
+  .item-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+  .item-name { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 600; color: #1A1208; letter-spacing: 0.3px; line-height: 1.3; }
+  .item-price { font-size: 13px; font-weight: 600; color: var(--gold); letter-spacing: 0.5px; white-space: nowrap; margin-top: 2px; }
+  .item-desc { font-size: 11px; color: #7A6E5E; letter-spacing: 0.5px; line-height: 1.6; margin-bottom: 10px; }
+  .item-badges { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+
+  .veg-marker, .nonveg-marker {
+    width: 14px; height: 14px; border-radius: 2px;
+    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .veg-marker { border: 1.5px solid var(--veg-green); }
+  .veg-marker::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--veg-green); }
+  .nonveg-marker { border: 1.5px solid var(--nonveg-brown); }
+  .nonveg-marker::after { content: ''; width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-bottom: 7px solid var(--nonveg-brown); }
+
+  .allergen-tag {
+    font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 2px; font-weight: 600; border: 1px solid;
+  }
+  .tag-eggs    { color: #9A7A00; border-color: rgba(154,122,0,0.25); background: rgba(154,122,0,0.06); }
+  .tag-dairy   { color: #2E7DA8; border-color: rgba(46,125,168,0.25); background: rgba(46,125,168,0.06); }
+  .tag-gluten  { color: #B05A1A; border-color: rgba(176,90,26,0.25); background: rgba(176,90,26,0.06); }
+  .tag-nuts    { color: #5A7A1A; border-color: rgba(90,122,26,0.25); background: rgba(90,122,26,0.06); }
+  .tag-seafood { color: #1A7A8A; border-color: rgba(26,122,138,0.25); background: rgba(26,122,138,0.06); }
+  .tag-pork    { color: #A03030; border-color: rgba(160,48,48,0.25); background: rgba(160,48,48,0.06); }
+
+  .promo-banner {
+    margin: 48px 0;
+    background: linear-gradient(135deg, #FDF8EE 0%, #FFF9F0 50%, #FDF8EE 100%);
+    border: 1px solid rgba(154,110,42,0.25);
+    padding: 32px 36px; position: relative; overflow: hidden;
+  }
+  .promo-banner::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .promo-banner::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(154,110,42,0.3), transparent);
+  }
+
+  .promo-eyebrow { font-size: 8px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .promo-inner { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+  .promo-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; color: #1A1208; margin-bottom: 6px; line-height: 1.2; }
+  .promo-title em { font-style: italic; color: var(--gold); }
+  .promo-desc { font-size: 11px; color: #7A6E5E; line-height: 1.6; max-width: 420px; }
+  .promo-badge { text-align: center; flex-shrink: 0; }
+  .promo-badge-ring {
+    width: 100px; height: 100px; border: 1.5px solid var(--gold); border-radius: 50%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;
+  }
+  .promo-badge-ring::before {
+    content: ''; position: absolute; inset: 5px;
+    border: 0.5px solid rgba(154,110,42,0.25); border-radius: 50%;
+  }
+  .promo-badge-label { font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: #9A9080; line-height: 1.3; text-align: center; }
+  .promo-badge-name { font-family: 'Cormorant Garamond', serif; font-size: 15px; font-weight: 600; color: var(--gold); letter-spacing: 1px; text-align: center; }
+
+  .extras-table { margin-top: 16px; border: 1px solid rgba(0,0,0,0.07); overflow: hidden; background: #FFFFFF; }
+  .extras-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 20px; border-bottom: 1px solid rgba(0,0,0,0.05);
+    font-size: 12px; color: #7A6E5E;
+  }
+  .extras-row:last-child { border-bottom: none; }
+  .extras-row:hover { background: #FAFAF6; }
+  .extras-name { letter-spacing: 0.5px; }
+  .extras-price { color: var(--gold); font-weight: 500; }
+
+  .subsection-label {
+    font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold);
+    margin: 32px 0 16px; display: flex; align-items: center; gap: 12px;
+  }
+  .subsection-label::after { content: ''; flex: 1; height: 1px; background: rgba(154,110,42,0.15); }
+
+  .legend {
+    margin-bottom: 28px; display: flex; gap: 20px; flex-wrap: wrap;
+    align-items: center; padding: 14px 20px;
+    background: #FFFFFF; border: 1px solid rgba(0,0,0,0.06);
+  }
+  .legend-item { display: flex; align-items: center; gap: 7px; font-size: 10px; color: #7A6E5E; letter-spacing: 0.5px; }
+
+  .item-image {
+    width: 100%; height: 140px;
+    background: linear-gradient(135deg, #F5F2EC, #EDE8E0);
+    margin-bottom: 14px; display: flex; align-items: center; justify-content: center;
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+    border: 1px dashed rgba(154,110,42,0.15); position: relative; overflow: hidden;
+  }
+  .item-image::before { content: '📷 FOOD PHOTO'; font-size: 9px; letter-spacing: 2px; color: rgba(154,110,42,0.3); }
+
+  .full-width { grid-column: 1 / -1; }
+
+  footer {
+    text-align: center; padding: 40px 24px;
+    border-top: 1px solid rgba(154,110,42,0.12); background: #FFFFFF;
+  }
+  .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 28px; letter-spacing: 10px; color: var(--gold); margin-bottom: 8px; }
+  .footer-note { font-size: 10px; color: #9A9080; letter-spacing: 1.5px; line-height: 1.8; }
+  .clock-tower-note { margin-top: 16px; font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: rgba(154,110,42,0.4); }
+
+  .choice-row {
+    margin-bottom: 16px; padding: 10px 16px;
+    background: rgba(154,110,42,0.04); border-left: 2px solid var(--gold);
+    font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: #7A6E5E;
+  }
+
+  .fade-in { opacity: 0; transform: translateY(16px); animation: fadeUp 0.5s forwards; }
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+  .fab-menu {
+    position: fixed; bottom: 32px; right: 32px; z-index: 200;
+    width: 72px; height: 72px; border-radius: 50%;
+    background: #FFFFFF; border: 1.5px solid var(--gold);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: pointer; box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    transition: transform 0.2s, box-shadow 0.2s; gap: 3px;
+  }
+  .fab-menu:hover { transform: scale(1.07); box-shadow: 0 6px 32px rgba(154,110,42,0.2); }
+  .fab-icon { font-size: 18px; line-height: 1; }
+  .fab-label { font-size: 7px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); font-weight: 600; line-height: 1; }
+
+  .menu-overlay {
+    display: none; position: fixed; inset: 0; z-index: 300;
+    background: rgba(0,0,0,0.4); backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    align-items: flex-end; justify-content: center;
+  }
+  .menu-overlay.open { display: flex; animation: overlayIn 0.25s ease; }
+  @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .menu-drawer {
+    width: 100%; max-width: 600px; background: #FFFFFF;
+    border: 1px solid rgba(154,110,42,0.15); border-bottom: none;
+    border-radius: 16px 16px 0 0; padding: 28px 24px 40px;
+    animation: drawerUp 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    max-height: 80vh; overflow-y: auto;
+    box-shadow: 0 -8px 40px rgba(0,0,0,0.12);
+  }
+  @keyframes drawerUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+  .drawer-handle { width: 40px; height: 4px; background: rgba(154,110,42,0.2); border-radius: 2px; margin: 0 auto 20px; }
+  .drawer-title { font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); text-align: center; margin-bottom: 20px; }
+  .drawer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+  .drawer-item {
+    background: #FAFAF6; border: 1px solid rgba(154,110,42,0.1);
+    padding: 14px 16px; cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s; border-radius: 4px;
+  }
+  .drawer-item:hover, .drawer-item:active {
+    border-color: rgba(154,110,42,0.35); background: #FFF8EE;
+    box-shadow: 0 2px 8px rgba(154,110,42,0.08);
+  }
+  .drawer-cat { font-family: 'Cormorant Garamond', serif; font-size: 15px; font-weight: 600; color: #1A1208; margin-bottom: 3px; }
+  .drawer-count { font-size: 9px; letter-spacing: 1px; color: #9A9080; }
+
+  .drawer-close {
+    width: 100%; margin-top: 16px; padding: 12px;
+    border: 1px solid rgba(154,110,42,0.2); background: none; color: #9A9080;
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    cursor: pointer; border-radius: 4px; font-family: 'Montserrat', sans-serif; transition: border-color 0.2s, color 0.2s;
+  }
+  .drawer-close:hover { border-color: rgba(154,110,42,0.5); color: var(--gold); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo-area">
+      <div class="logo-box">
+        <div>
+          <div class="logo-text-main">LOFT</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:8px;letter-spacing:3px;color:var(--cream-muted);text-transform:uppercase;">[ LOGO SPACE ]</div>
+        <div style="font-size:10px;letter-spacing:2px;color:var(--gold);margin-top:2px;font-family:'Cormorant Garamond',serif;">Clock Tower</div>
+      </div>
+    </div>
+    <div class="header-tagline">Est. 2025 &nbsp;·&nbsp; All Day Dining</div>
+  </div>
+</header>
+
+<!-- NAVIGATION TABS -->
+<nav class="nav-tabs">
+  <div class="nav-inner">
+    <button class="nav-tab active" onclick="showSection('breakfast')">All Day Breakfast</button>
+    <button class="nav-tab" onclick="showSection('salads')">Salads</button>
+    <button class="nav-tab" onclick="showSection('small-plates')">Small Plates</button>
+    <button class="nav-tab" onclick="showSection('large-plates')">Large Plates</button>
+    <button class="nav-tab" onclick="showSection('quick-bites')">Quick Bites</button>
+    <button class="nav-tab" onclick="showSection('grill')">From The Grill</button>
+    <button class="nav-tab" onclick="showSection('bowls')">All Day Bowls</button>
+    <button class="nav-tab" onclick="showSection('curry')">Curry Connect</button>
+    <button class="nav-tab" onclick="showSection('pasta')">Pasta Point</button>
+    <button class="nav-tab" onclick="showSection('pizza')">Pizza</button>
+    <button class="nav-tab" onclick="showSection('desserts')">Desserts</button>
+    <button class="nav-tab" onclick="showSection('tea-coffee')">Tea & Coffee</button>
+  </div>
+</nav>
+
+<!-- FLOATING MENU BUTTON -->
+<div class="fab-menu" onclick="openMenuOverlay()">
+  <span class="fab-icon">📖</span>
+  <span class="fab-label">Menu</span>
+</div>
+
+<!-- MENU OVERLAY DRAWER -->
+<div class="menu-overlay" id="menuOverlay" onclick="handleOverlayClick(event)">
+  <div class="menu-drawer">
+    <div class="drawer-handle"></div>
+    <div class="drawer-title">See Full Menu</div>
+    <div class="drawer-grid">
+      <div class="drawer-item" onclick="selectFromDrawer('breakfast')">
+        <div class="drawer-cat">All Day Breakfast</div>
+        <div class="drawer-count">11 items</div>
+      </div>
+      <div class="drawer-item" onclick="selectFromDrawer('salads')">
+        <div class="drawer-cat">Salads</div>
+        <div class="drawer-count">5 items</div>
+      </div>
+      <div class="drawer-item" onclick="selectFromDrawer('small-plates')">
+        <div class="drawer-cat">Small Plates</div>
+        <div class="drawer-count">10 items</div>
+      </div>
+      <div class="drawer-item" onclick="selectFromDrawer('large-plates')">
+        <div class="drawer-cat">Large Plates</div>
+        <div class="drawer-count">9 items</div>
+      </div>
+      <div class="drawer-item" onclick="selectFromDrawer('quick-bites')">
+        <div class="drawer-cat">Quick Bites</div>
+        <div class="drawer-count">8 items</div>
+      </div>
+      <div class="drawer-item" onclick="selectFromDrawer('grill')">
+        <div class="drawer-cat">From The Grill</div>
+        <div class="drawer-count">8 items</div>
+      </div>
+      <div class="drawer-item" onclick="selectFromDrawer('bowls')">
+        <div class="drawer-cat">All Day Bowls</div>
+        <div class="drawer-count">8 items</div>
+      </div>
+      <div class="drawer-item" onclick="selectFromDrawer('curry')">
+        <div class="drawer-cat">Curry Connect</div>
+        <div class="drawer-count">7 items</div>
+      </div>
+      <div class="drawer-item" onclick="selectFromDrawer('pasta')">
+        <div class="drawer-cat">Pasta Point</div>
+        <div class="drawer-count">8 items</div>
+      </div>
+      <div class="drawer-item" onclick="selectFromDrawer('pizza')">
+        <div class="drawer-cat">Pizza</div>
+        <div class="drawer-count">8 items</div>
+      </div>
+      <div class="drawer-item" onclick="selectFromDrawer('desserts')">
+        <div class="drawer-cat">Desserts</div>
+        <div class="drawer-count">5 items</div>
+      </div>
+      <div class="drawer-item" onclick="selectFromDrawer('tea-coffee')">
+        <div class="drawer-cat">Tea & Coffee</div>
+        <div class="drawer-count">8 items</div>
+      </div>
+    </div>
+    <button class="drawer-close" onclick="closeMenuOverlay()">Close</button>
+  </div>
+</div>
+
+<main>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-item"><span class="veg-marker"></span> Vegetarian</div>
+    <div class="legend-item"><span class="nonveg-marker"></span> Non-Vegetarian</div>
+    <div class="legend-item"><span class="allergen-tag tag-eggs">Eggs</span></div>
+    <div class="legend-item"><span class="allergen-tag tag-dairy">Dairy</span></div>
+    <div class="legend-item"><span class="allergen-tag tag-gluten">Gluten</span></div>
+    <div class="allergen-tag tag-nuts">Nuts</span></div>
+    <div class="legend-item"><span class="allergen-tag tag-seafood">Seafood</span></div>
+    <div class="legend-item"><span class="allergen-tag tag-pork">Pork</span></div>
+  </div>
+
+  <!-- ======================== BREAKFAST ======================== -->
+  <div id="breakfast" class="menu-section active">
+    <div class="section-header active">
+      <div class="section-eyebrow">Morning to Night</div>
+      <div class="section-title">All Day Breakfast</div>
+      <div class="section-note">Choice of Bread:</div>
+      <div class="bread-options">
+        <span class="bread-pill">White</span>
+        <span class="bread-pill">Whole Wheat</span>
+        <span class="bread-pill">Multigrain</span>
+        <span class="bread-pill">Sourdough</span>
+      </div>
+    </div>
+
+    <div class="menu-grid">
+      <div class="menu-item">
+        <div class="item-image"></div>
+        <div class="item-top">
+          <div class="item-name">Loft Big Breakfast</div>
+          <div class="item-price">₹475</div>
+        </div>
+        <div class="item-desc">Eggs, chicken sausage, pork bacon, mushrooms, toast</div>
+        <div class="item-badges">
+          <span class="nonveg-marker"></span>
+          <span class="allergen-tag tag-eggs">Eggs</span>
+          <span class="allergen-tag tag-gluten">Gluten</span>
+          <span class="allergen-tag tag-pork">Pork</span>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="item-image"></div>
+        <div class="item-top">
+          <div class="item-name">Big Cancun Breakfast</div>
+          <div class="item-price">₹475</div>
+        </div>
+        <div class="item-desc">Scrambled eggs, spiced beans, cumin potatoes, grilled peppers and toast</div>
+        <div class="item-badges">
+          <span class="nonveg-marker"></span>
+          <span class="allergen-tag tag-eggs">Eggs</span>
+          <span class="allergen-tag tag-gluten">Gluten</span>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="item-image"></div>
+        <div class="item-top">
+          <div class="item-name">Hearty Veggie Breakfast</div>
+          <div class="item-price">₹425</div>
+        </div>
+        <div class="item-desc">Paneer scramble, hash browns, mushrooms, toast</div>
+        <div class="item-badges">
+          <span class="veg-marker"></span>
+          <span class="allergen-tag tag-dairy">Dairy</span>
+          <span class="allergen-tag tag-gluten">Gluten</span>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="item-image"></div>
+        <div class="item-top">
+          <div class="item-name">Eggs Your Way</div>
+          <div class="item-price">₹395</div>
+        </div>
+        <div class="item-desc">Two eggs made any style you like, buttered toast</div>
+        <div class="item-badges">
+          <span class="nonveg-marker"></span>
+          <span class="allergen-tag tag-eggs">Eggs</span>
+          <span class="allergen-tag tag-gluten">Gluten</span>
+          <span class="allergen-tag tag-dairy">Dairy</span>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="item-image"></div>
+        <div class="item-top">
+          <div class="item-name">Masala Omelette</div>
+          <div class="item-price">₹425</div>
+        </div>
+        <div class="item-desc">Three-egg omelette, onion, green chilli</div>
+        <div class="item-badges">
+          <span class="nonveg-marker"></span>
+          <span class="allergen-tag tag-eggs">Eggs</span>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="item-image"></div>
+        <div class="item-top">
+          <div class="item-name">Avocado Tomato Toast</div>
+          <div class="item-price">₹495</div>
+        </div>
+        <div class="item-desc">Smashed avocado, slow baked cherry tomatoes</div>
+        <div class="item-badges">
+          <span class="veg-marker"></span>
+          <span class="allergen-tag tag-gluten">Gluten</span>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="item-image"></div>
+        <div class="item-top">
+          <div class="item-name">Avocado Egg Toast</div>
+          <div class="item-price">₹495</div>
+        </div>
+        <div class="item-desc">Poached eggs, smashed avocado</div>
+        <div class="item-badges">
+          <span class="nonveg-marker"></span>
+          <span class="allergen-tag tag-eggs">Eggs</span>
+          <span class="allergen-tag tag-gluten">Gluten</span>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="item-image"></div>
+        <div class="item-top">
+          <div class="item-name">Egg & Cheese Toastie</div>
+          <div class="item-price">₹445</div>
+        </div>
+        <div class="item-desc">Soft scrambled eggs and cheddar</div>
+        <div class="item-badges">
+          <span class="nonveg-marker"></span>
+          <span class="allergen-tag tag-eggs">Eggs</span>
+          <span class="allergen-tag tag-dairy">Dairy</span>
+          <span class="allergen-tag tag-gluten">Gluten</span>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="item-image"></div>
+        <div class="item-top">
+          <div class="item-name">Bacon, Egg & Cheese Toastie</div>
+          <div class="item-price">₹495</div>
+        </div>
+        <div class="item-desc">Pork bacon, fried egg, cheese and mustard mayo</div>
+        <div class="item-badges">
+          <span class="nonveg-marker"></span>
+          <span class="allergen-tag tag-eggs">Eggs</span>
+          <span class="allergen-tag tag-dairy">Dairy</span>
+          <span class="allergen-tag tag-gluten">Gluten</span>
+          <span class="allergen-tag tag-pork">Pork</span>
+        </div>
+      </div>
+      <div class="menu-item">
+        <div class="item-image"></div>
+        <div class="item-top">
+          <div class="item-name">Chilli Basil Egg Toastie</div>
+          <div class="item-price">₹465</div>
+        </div>
+        <div class="item-desc">Scrambled eggs tossed with garlic, green chilli and Thai basil</div>
+        <div class="item-badges">
+          <span class="nonveg-marker"></span>
+          <span class="allergen-tag tag-eggs">Eggs</span>
+          <span class="allergen-tag tag-gluten">Gluten</span>
+        </div>
+      </div>
+      <div class="menu-item full-width">
+        <div class="item-image"></div>
+        <div class="item-top">
+          <div class="item-name">Choice of Pancakes, Waffle or French Toast</div>
+          <div class="item-price">₹425</div>
+        </div>
+        <div class="item-desc">Served with melted butter and maple syrup</div>
+        <div class="item-badges">
+          <span class="nonveg-marker"></span>
+          <span class="allergen-tag tag-eggs">Eggs</span>
+          <span class="allergen-tag tag-dairy">Dairy</span>
+          <span class="allergen-tag tag-gluten">Gluten</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection-label">Extra Sides</div>
+    <div class="extras-table">
+      <div class="extras-row"><span class="extras-name"><span class="nonveg-marker" style="display:inline-flex;vertical-align:middle;margin-right:8px;"></span>Pork Bacon</span><span class="extras-price">₹195</span></div>
+      <div class="extras-row"><span class="extras-name"><span class="nonveg-marker" style="display:inline-flex;vertical-align:middle;margin-right:8px;"></span>Chicken Sausage</span><span class="extras-price">₹195</span></div>
+      <div class="extras-row"><span class="extras-name"><span class="veg-marker" style="display:inline-flex;vertical-align:middle;margin-right:8px;"></span>Hash Browns</span><span class="extras-price">₹165</span></div>
+      <div class="extras-row"><span class="extras-name"><span class="veg-marker" style="display:inline-flex;vertical-align:middle;margin-right:8px;"></span>Sautéed Mushrooms</span><span class="extras-price">₹145</span></div>
+      <div class="extras-row"><span class="extras-name"><span class="veg-marker" style="display:inline-flex;vertical-align:middle;margin-right:8px;"></span>Toast (White / Brown / Sourdough)</span><span class="extras-price">₹95</span></div>
+    </div>
+
+    <!-- PROMO BANNER 1 - MANGO BEER -->
+    <div class="promo-banner">
+      <div class="promo-eyebrow">✦ Visit Clock Tower ✦</div>
+      <div class="promo-inner">
+        <div>
+          <div class="promo-title">Discover Gurugram's<br><em>Favourite Mango Beer</em></div>
+          <div class="promo-desc">Cold, craft and unmistakably summery. Only at Clock Tower — Gurugram's favourite destination for great food, great company and even better beer.</div>
+        </div>
+        <div class="promo-badge">
+          <div style="width:100px;height:100px;border:1.5px dashed rgba(201,168,76,0.3);border-radius:4px;display:flex;align-items:center;justify-content:center;">
+            <span style="font-size:8px;letter-spacing:1.5px;color:rgba(201,168,76,0.3);text-transform:uppercase;text-align:center;line-height:1.6;">Photo<br>Here</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== SALADS ======================== -->
+  <div id="salads" class="menu-section">
+    <div class="section-header active">
+      <div class="section-eyebrow">Fresh & Composed</div>
+      <div class="section-title">Salads</div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item">
+        <div class="item-image"></div>
+        <div class="item-top"><div class="item-name">Caesar Salad</div><div class="item-price">₹495</div></div>
+        <div class="item-desc">Mixed salad greens, roasted vegetables, sundried tomatoes, caesar dressing</div>
+        <div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-dairy">Dairy</span><span class="allergen-tag tag-eggs">Eggs</span></div>
+      </div>
+      <div class="menu-item">
+        <div class="item-image"></div>
+        <div class="item-top"><div class="item-name">Three Mushroom, Broccoli & Almond Salad</div><div class="item-price">₹595</div></div>
+        <div class="item-desc">Sautéed mushrooms, steamed broccoli, mixed mesclun, toasted almonds</div>
+        <div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-nuts">Nuts</span></div>
+      </div>
+      <div class="menu-item">
+        <div class="item-image"></div>
+        <div class="item-top"><div class="item-name">Sesame Chicken Salad</div><div class="item-price">₹525</div></div>
+        <div class="item-desc">Grilled chicken, mixed salad greens, soy sesame dressing</div>
+        <div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-nuts">Nuts</span></div>
+      </div>
+      <div class="menu-item">
+        <div class="item-image"></div>
+        <div class="item-top"><div class="item-name">Cancun Chicken Salad</div><div class="item-price">₹525</div></div>
+        <div class="item-desc">Grilled chicken, pineapple, beans, corn, iceberg, smoky barbeque dressing</div>
+        <div class="item-badges"><span class="nonveg-marker"></span></div>
+      </div>
+      <div class="menu-item full-width">
+        <div class="item-image"></div>
+        <div class="item-top"><div class="item-name">Thai Prawn & Pomelo Salad</div><div class="item-price">₹595</div></div>
+        <div class="item-desc">Grilled prawns with pomelo, herbs and chilli lime dressing</div>
+        <div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-seafood">Seafood</span></div>
+      </div>
+    </div>
+
+    <!-- PROMO BANNER 2 - LOFT BAR -->
+    <div class="promo-banner">
+      <div class="promo-eyebrow">✦ Now Pouring at Loft Bar ✦</div>
+      <div class="promo-inner">
+        <div>
+          <div class="promo-title">Loft Bar<br><em>Every Evening</em></div>
+          <div class="promo-desc">Craft cocktails, curated wines and sundowner specials every evening from 5 PM.</div>
+        </div>
+        <div class="promo-badge">
+          <div class="promo-badge-ring">
+            <div class="promo-badge-label">LOFT</div>
+            <div class="promo-badge-name">BAR</div>
+            <div class="promo-badge-label">5PM ONWARDS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== SMALL PLATES ======================== -->
+  <div id="small-plates" class="menu-section">
+    <div class="section-header active">
+      <div class="section-eyebrow">Share & Snack</div>
+      <div class="section-title">Small Plates</div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Cajun Spiced Corn Ribs</div><div class="item-price">₹395</div></div><div class="item-desc">Crispy corn ribs, Cajun spice, smoked mayonnaise</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-eggs">Eggs</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Classic Cheese Jalapeño Pops</div><div class="item-price">₹395</div></div><div class="item-desc">Fried cheese poppers, pickled jalapeños, chipotle dip</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-dairy">Dairy</span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Crispy Lotus Stem</div><div class="item-price">₹395</div></div><div class="item-desc">Golden fried lotus stem, sweet chilli sauce</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Bang Bang Broccoli</div><div class="item-price">₹425</div></div><div class="item-desc">Crispy broccoli florets, sweet & spicy chilli-lime mayo</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-eggs">Eggs</span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Loft Signature Cajun Chicken Wings</div><div class="item-price">₹495</div></div><div class="item-desc">Crispy wings tossed in Cajun butter</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-dairy">Dairy</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Chilli Basil Chicken</div><div class="item-price">₹495</div></div><div class="item-desc">Wok-tossed chicken, garlic, green chilli, basil</div><div class="item-badges"><span class="nonveg-marker"></span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Tempura Prawns</div><div class="item-price">₹595</div></div><div class="item-desc">Lightly battered prawns, chilli-lime mayonnaise</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-seafood">Seafood</span><span class="allergen-tag tag-gluten">Gluten</span><span class="allergen-tag tag-eggs">Eggs</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Ajwain Fish Fingers</div><div class="item-price">₹545</div></div><div class="item-desc">Crispy fish fingers, ajwain spice, chilli aioli</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-seafood">Seafood</span><span class="allergen-tag tag-gluten">Gluten</span><span class="allergen-tag tag-eggs">Eggs</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Loaded Bar Fries (Veg)</div><div class="item-price">₹495</div></div><div class="item-desc">Crispy fries topped with cheese sauce, jalapeños and pico de gallo</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-dairy">Dairy</span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Loaded Bar Fries (Chicken / Pork Bacon)</div><div class="item-price">₹595</div></div><div class="item-desc">Crispy fries with BBQ chicken or pork bacon and melted cheese</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-dairy">Dairy</span><span class="allergen-tag tag-gluten">Gluten</span><span class="allergen-tag tag-pork">Pork</span></div></div>
+    </div>
+
+    <!-- PROMO BANNER 3 -->
+    <div class="promo-banner">
+      <div class="promo-eyebrow">✦ New On Our Bar ✦</div>
+      <div class="promo-inner">
+        <div>
+          <div class="promo-title">Introducing<br><em>Sangria Sundays</em></div>
+          <div class="promo-desc">Every Sunday from noon — jugs of house sangria at special prices. Red, white or rosé. This week's seasonal recipe changes every week.</div>
+        </div>
+        <div class="promo-badge">
+          <div class="promo-badge-ring">
+            <div class="promo-badge-label">EVERY</div>
+            <div class="promo-badge-name">SUN</div>
+            <div class="promo-badge-label">FROM NOON</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== LARGE PLATES ======================== -->
+  <div id="large-plates" class="menu-section">
+    <div class="section-header active">
+      <div class="section-eyebrow">For The Table</div>
+      <div class="section-title">Large Plates</div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Loaded Nacho Skillet</div><div class="item-price">₹995</div></div><div class="item-desc">Griddle-baked nachos with cheese sauce, beans, pico and sour cream</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-dairy">Dairy</span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Chargrilled Veggie Platter</div><div class="item-price">₹995</div></div><div class="item-desc">Charred mushrooms, asparagus, paneer tikka, roasted bell peppers, lemon herb dip</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-dairy">Dairy</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Asian Street Veg Basket</div><div class="item-price">₹995</div></div><div class="item-desc">Crispy broccoli, lotus stem and chilli potatoes in sweet-hot glaze</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Smoked Chicken & Wings Board</div><div class="item-price">₹1,195</div></div><div class="item-desc">BBQ chicken skewers, Cajun wings and house ranch</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-dairy">Dairy</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Cancun Meat Skillet</div><div class="item-price">₹1,195</div></div><div class="item-desc">Griddled chicken, pork mince, peppers and chipotle glaze</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-pork">Pork</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">The Indian Grill</div><div class="item-price">₹1,195</div></div><div class="item-desc">Chicken malai tikka, lamb seekh and ajwain fish with mint emulsion</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-seafood">Seafood</span><span class="allergen-tag tag-dairy">Dairy</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Indian Grill Plate</div><div class="item-price">₹1,295</div></div><div class="item-desc">Chicken tikka, lamb seekh kebab, fish tikka</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-seafood">Seafood</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Pork Lovers Board</div><div class="item-price">₹1,295</div></div><div class="item-desc">BBQ pork ribs, pork belly bites and bacon-wrapped sausages</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-pork">Pork</span></div></div>
+      <div class="menu-item full-width"><div class="item-image"></div><div class="item-top"><div class="item-name">Loft Signature Grill Platter</div><div class="item-price">₹1,295</div></div><div class="item-desc">Thai-chilli chicken, BBQ pork belly, Cajun prawns, lamb seekh and grilled vegetables</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-pork">Pork</span><span class="allergen-tag tag-seafood">Seafood</span></div></div>
+    </div>
+  </div>
+
+  <!-- ======================== QUICK BITES ======================== -->
+  <div id="quick-bites" class="menu-section">
+    <div class="section-header active">
+      <div class="section-eyebrow">Handheld & Satisfying</div>
+      <div class="section-title">Quick Bites</div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Cottage Cheese Crunch Burger</div><div class="item-price">₹495</div></div><div class="item-desc">Crispy paneer patty, pepper mayonnaise, soft bun</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-dairy">Dairy</span><span class="allergen-tag tag-gluten">Gluten</span><span class="allergen-tag tag-eggs">Eggs</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Mushroom Melt Wrap</div><div class="item-price">₹495</div></div><div class="item-desc">Grilled mushrooms, melted cheese, herb mayonnaise</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-dairy">Dairy</span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Cancun Chicken Burger</div><div class="item-price">₹495</div></div><div class="item-desc">Grilled chicken patty, smoky tomato salsa</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">BBQ Chicken Burger</div><div class="item-price">₹495</div></div><div class="item-desc">Grilled chicken patty, barbecue sauce</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Chilli Chicken Wrap</div><div class="item-price">₹495</div></div><div class="item-desc">Spicy chicken, crunchy cabbage slaw</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Lamb Seekh Slider</div><div class="item-price">₹595</div></div><div class="item-desc">Grilled lamb seekh kebab, soft slider bun</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Cancun Fish Wrap</div><div class="item-price">₹595</div></div><div class="item-desc">Crispy fish, cabbage slaw, lime dressing</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-seafood">Seafood</span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Prawn Chilli Wrap</div><div class="item-price">₹695</div></div><div class="item-desc">Spicy prawns, sautéed vegetables</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-seafood">Seafood</span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+    </div>
+  </div>
+
+  <!-- ======================== GRILL ======================== -->
+  <div id="grill" class="menu-section">
+    <div class="section-header active">
+      <div class="section-eyebrow">Fire & Char</div>
+      <div class="section-title">From The Grill</div>
+      <div class="section-note">All grill items are served with choice of two sides: Roast Potatoes · Hash Browns · Buttered Broccoli · Grilled Carrots · Herbed Rice</div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Charred Cauliflower</div><div class="item-price">₹695</div></div><div class="item-desc">Grilled cauliflower steak, savoury glaze, lemon</div><div class="item-badges"><span class="veg-marker"></span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Grilled Tofu Skewers</div><div class="item-price">₹695</div></div><div class="item-desc">Grilled tofu, soy glaze, sesame</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-nuts">Nuts</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Korean Tofu Steak</div><div class="item-price">₹695</div></div><div class="item-desc">Grilled gochujang firm tofu, sweet-spicy chilli sauce</div><div class="item-badges"><span class="veg-marker"></span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Pepper Mushroom Skewers</div><div class="item-price">₹695</div></div><div class="item-desc">Grilled mushrooms, cracked black pepper</div><div class="item-badges"><span class="veg-marker"></span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Chilli Butter Chicken</div><div class="item-price">₹795</div></div><div class="item-desc">Grilled chicken thigh, chilli butter sauce</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-dairy">Dairy</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Ajwain Fish Tikka</div><div class="item-price">₹795</div></div><div class="item-desc">Grilled fish, ajwain spice, lime</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-seafood">Seafood</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Soy Butter Prawns</div><div class="item-price">₹895</div></div><div class="item-desc">Grilled prawns, soy butter glaze</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-seafood">Seafood</span><span class="allergen-tag tag-dairy">Dairy</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">BBQ Pork Ribs</div><div class="item-price">₹995</div></div><div class="item-desc">Slow-cooked pork ribs, barbecue glaze</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-pork">Pork</span></div></div>
+    </div>
+
+    <!-- PROMO BANNER 4 -->
+    <div class="promo-banner">
+      <div class="promo-eyebrow">✦ Weekend Special ✦</div>
+      <div class="promo-inner">
+        <div>
+          <div class="promo-title"><em>The Weekend Grill</em><br>Feast for Two</div>
+          <div class="promo-desc">Weekend exclusive — a curated grill board for two with our chef's choice of proteins, two sides and a complimentary mocktail. Available Saturday & Sunday only.</div>
+        </div>
+        <div class="promo-badge">
+          <div class="promo-badge-ring">
+            <div class="promo-badge-label">SAT &</div>
+            <div class="promo-badge-name">SUN</div>
+            <div class="promo-badge-label">ONLY</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== BOWLS ======================== -->
+  <div id="bowls" class="menu-section">
+    <div class="section-header active">
+      <div class="section-eyebrow">Comfort in a Bowl</div>
+      <div class="section-title">All Day Bowls</div>
+      <div class="section-note">Choice of Rice:</div>
+      <div class="bread-options"><span class="bread-pill">White</span><span class="bread-pill">Brown</span><span class="bread-pill">Red</span></div>
+      <div class="section-note" style="margin-top:10px;">All bowls are accompanied with complementing seasonal vegetables</div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Thai Green Curry Vegetables</div><div class="item-price">₹595</div></div><div class="item-desc">Seasonal vegetables simmered in aromatic coconut green curry</div><div class="item-badges"><span class="veg-marker"></span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Mixed Mushroom Bowl</div><div class="item-price">₹595</div></div><div class="item-desc">Sautéed mixed mushrooms, garlic sauce</div><div class="item-badges"><span class="veg-marker"></span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Pepper Soy Chaap Bowl</div><div class="item-price">₹595</div></div><div class="item-desc">Grilled soy chaap, black pepper gravy</div><div class="item-badges"><span class="veg-marker"></span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Chilli Basil Chicken Bowl</div><div class="item-price">₹695</div></div><div class="item-desc">Spicy chicken, basil sauce</div><div class="item-badges"><span class="nonveg-marker"></span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Cancun Chicken Bowl</div><div class="item-price">₹695</div></div><div class="item-desc">Grilled chicken, beans, peppers, smoky sauce</div><div class="item-badges"><span class="nonveg-marker"></span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Korean Chicken Bowl</div><div class="item-price">₹695</div></div><div class="item-desc">Chicken in sweet chilli sauce</div><div class="item-badges"><span class="nonveg-marker"></span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Lamb Curry Bowl</div><div class="item-price">₹795</div></div><div class="item-desc">Slow-cooked lamb curry</div><div class="item-badges"><span class="nonveg-marker"></span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Coastal Prawn Bowl</div><div class="item-price">₹795</div></div><div class="item-desc">Prawns in coconut curry</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-seafood">Seafood</span></div></div>
+    </div>
+  </div>
+
+  <!-- ======================== CURRY ======================== -->
+  <div id="curry" class="menu-section">
+    <div class="section-header active">
+      <div class="section-eyebrow">India on a Plate</div>
+      <div class="section-title">Curry Connect</div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Amritsari Mushroom</div><div class="item-price">₹595</div></div><div class="item-desc">Mushrooms, Punjabi-style onion-tomato gravy</div><div class="item-badges"><span class="veg-marker"></span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Paneer Shahi Korma</div><div class="item-price">₹595</div></div><div class="item-desc">Paneer, mild cashew-onion gravy</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-dairy">Dairy</span><span class="allergen-tag tag-nuts">Nuts</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Chicken Pepper Fry</div><div class="item-price">₹695</div></div><div class="item-desc">Chicken, cracked black pepper, onion gravy</div><div class="item-badges"><span class="nonveg-marker"></span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Chicken Kosha</div><div class="item-price">₹695</div></div><div class="item-desc">Slow-cooked chicken curry, thick onion gravy</div><div class="item-badges"><span class="nonveg-marker"></span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Jodhpuri Laal Maas</div><div class="item-price">₹795</div></div><div class="item-desc">Slow-cooked lamb, smoky red chilli gravy</div><div class="item-badges"><span class="nonveg-marker"></span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Malabar Fish Curry</div><div class="item-price">₹795</div></div><div class="item-desc">Fish, tangy coconut gravy</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-seafood">Seafood</span></div></div>
+      <div class="menu-item full-width"><div class="item-image"></div><div class="item-top"><div class="item-name">Goan Prawn Curry</div><div class="item-price">₹795</div></div><div class="item-desc">Prawns, coconut milk, coastal spices</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-seafood">Seafood</span></div></div>
+    </div>
+
+    <div class="subsection-label">Accompaniments</div>
+    <div class="extras-table">
+      <div class="extras-row"><span class="extras-name">Ajwain Paratha</span><span class="extras-price">₹95</span></div>
+      <div class="extras-row"><span class="extras-name">Lachha Paratha</span><span class="extras-price">₹95</span></div>
+      <div class="extras-row"><span class="extras-name">Whole Wheat Roti</span><span class="extras-price">₹75</span></div>
+      <div class="extras-row"><span class="extras-name">Steamed Rice</span><span class="extras-price">₹95</span></div>
+      <div class="extras-row"><span class="extras-name">Jeera Rice</span><span class="extras-price">₹125</span></div>
+    </div>
+  </div>
+
+  <!-- ======================== PASTA ======================== -->
+  <div id="pasta" class="menu-section">
+    <div class="section-header active">
+      <div class="section-eyebrow">Italian Soul</div>
+      <div class="section-title">Pasta Point</div>
+      <div class="section-note">Choice of Pasta:</div>
+      <div class="bread-options"><span class="bread-pill">Penne</span><span class="bread-pill">Spaghetti</span></div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Creamy Mushroom</div><div class="item-price">₹595</div></div><div class="item-desc">Mushrooms, garlic cream sauce, parmesan</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-dairy">Dairy</span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Arrabbiata</div><div class="item-price">₹595</div></div><div class="item-desc">Mixed vegetables, spicy tomato sauce</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Pesto</div><div class="item-price">₹595</div></div><div class="item-desc">Basil pesto, roasted vegetables</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-nuts">Nuts</span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Corn & Cheese</div><div class="item-price">₹595</div></div><div class="item-desc">Sweet corn, peppers, creamy cheese sauce</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-dairy">Dairy</span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Chicken Alfredo</div><div class="item-price">₹695</div></div><div class="item-desc">Grilled chicken, creamy garlic sauce</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-dairy">Dairy</span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Chicken Arrabbiata</div><div class="item-price">₹695</div></div><div class="item-desc">Grilled chicken, spicy tomato sauce</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Chicken Pesto Pasta</div><div class="item-price">₹695</div></div><div class="item-desc">Grilled chicken, basil pesto</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-nuts">Nuts</span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Prawn Aglio Olio</div><div class="item-price">₹795</div></div><div class="item-desc">Prawns, garlic, chilli flakes, parsley, olive oil</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-seafood">Seafood</span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+    </div>
+  </div>
+
+  <!-- ======================== PIZZA ======================== -->
+  <div id="pizza" class="menu-section">
+    <div class="section-header active">
+      <div class="section-eyebrow">Stone-fired</div>
+      <div class="section-title">Pizza</div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">California Pizza</div><div class="item-price">₹755</div></div><div class="item-desc">Pasilla pepper, freshno pepper, red onions, black beans, corn salsa, avocado, cilantro</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-gluten">Gluten</span><span class="allergen-tag tag-dairy">Dairy</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Pesto Tomato</div><div class="item-price">₹755</div></div><div class="item-desc">Pesto, olive, sun dried tomato, bocconcini</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-gluten">Gluten</span><span class="allergen-tag tag-dairy">Dairy</span><span class="allergen-tag tag-nuts">Nuts</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Primavera Pizza</div><div class="item-price">₹745</div></div><div class="item-desc">Roasted seasonal vegetables, sun dried tomatoes and olive</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-gluten">Gluten</span><span class="allergen-tag tag-dairy">Dairy</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Paneer Tikka Pizza</div><div class="item-price">₹745</div></div><div class="item-desc">Paneer tikka, coriander, mint and chilli</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-gluten">Gluten</span><span class="allergen-tag tag-dairy">Dairy</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">BBQ Chicken Pizza</div><div class="item-price">₹825</div></div><div class="item-desc">Spicy paprika chicken, thyme & onion, pineapple</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-gluten">Gluten</span><span class="allergen-tag tag-dairy">Dairy</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Siciliana Pizza</div><div class="item-price">₹845</div></div><div class="item-desc">Smoked chicken, chicken sausage, pickled chillies and chilli flakes</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-gluten">Gluten</span><span class="allergen-tag tag-dairy">Dairy</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Pepperoni Pizza</div><div class="item-price">₹855</div></div><div class="item-desc">Pork pepperoni</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-gluten">Gluten</span><span class="allergen-tag tag-dairy">Dairy</span><span class="allergen-tag tag-pork">Pork</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Chicken 65 Pizza</div><div class="item-price">₹845</div></div><div class="item-desc">Chicken 65, curry leaves, green chilli and onion</div><div class="item-badges"><span class="nonveg-marker"></span><span class="allergen-tag tag-gluten">Gluten</span><span class="allergen-tag tag-dairy">Dairy</span></div></div>
+    </div>
+  </div>
+
+  <!-- ======================== DESSERTS ======================== -->
+  <div id="desserts" class="menu-section">
+    <div class="section-header active">
+      <div class="section-eyebrow">Sweet Endings</div>
+      <div class="section-title">Desserts</div>
+    </div>
+    <div class="menu-grid">
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Chocolate Brownie & Ice Cream</div><div class="item-price">₹395</div></div><div class="item-desc">Warm brownie, vanilla ice cream</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-eggs">Eggs</span><span class="allergen-tag tag-dairy">Dairy</span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Chocolate Fudge Cake</div><div class="item-price">₹395</div></div><div class="item-desc">Soft chocolate cake, hot fudge sauce</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-eggs">Eggs</span><span class="allergen-tag tag-dairy">Dairy</span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Salted Caramel Cheesecake</div><div class="item-price">₹395</div></div><div class="item-desc">Creamy cheesecake, salted caramel</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-dairy">Dairy</span><span class="allergen-tag tag-eggs">Eggs</span><span class="allergen-tag tag-gluten">Gluten</span></div></div>
+      <div class="menu-item"><div class="item-image"></div><div class="item-top"><div class="item-name">Coconut Panna Cotta</div><div class="item-price">₹395</div></div><div class="item-desc">Light coconut milk dessert</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-dairy">Dairy</span></div></div>
+      <div class="menu-item full-width"><div class="item-image"></div><div class="item-top"><div class="item-name">Churros & Chocolate Dip</div><div class="item-price">₹395</div></div><div class="item-desc">Crispy churros, warm chocolate sauce</div><div class="item-badges"><span class="veg-marker"></span><span class="allergen-tag tag-gluten">Gluten</span><span class="allergen-tag tag-eggs">Eggs</span><span class="allergen-tag tag-dairy">Dairy</span></div></div>
+    </div>
+  </div>
+
+  <!-- ======================== TEA & COFFEE ======================== -->
+  <div id="tea-coffee" class="menu-section">
+    <div class="section-header active">
+      <div class="section-eyebrow">Sip & Unwind</div>
+      <div class="section-title">Tea & Coffee</div>
+    </div>
+
+    <div class="subsection-label">Hot</div>
+    <div class="extras-table">
+      <div class="extras-row"><span class="extras-name"><span class="veg-marker" style="display:inline-flex;vertical-align:middle;margin-right:8px;"></span>Masala Chai</span><span class="extras-price">₹175</span></div>
+      <div class="extras-row"><span class="extras-name"><span class="veg-marker" style="display:inline-flex;vertical-align:middle;margin-right:8px;"></span>Green Tea / Lemon Tea</span><span class="extras-price">₹175</span></div>
+      <div class="extras-row"><span class="extras-name"><span class="veg-marker" style="display:inline-flex;vertical-align:middle;margin-right:8px;"></span>Espresso</span><span class="extras-price">₹170</span></div>
+      <div class="extras-row"><span class="extras-name"><span class="veg-marker" style="display:inline-flex;vertical-align:middle;margin-right:8px;"></span>Cappuccino</span><span class="extras-price">₹195</span></div>
+      <div class="extras-row"><span class="extras-name"><span class="veg-marker" style="display:inline-flex;vertical-align:middle;margin-right:8px;"></span>Café Latte</span><span class="extras-price">₹195</span></div>
+    </div>
+
+    <div class="subsection-label">Cold</div>
+    <div class="extras-table">
+      <div class="extras-row"><span class="extras-name"><span class="veg-marker" style="display:inline-flex;vertical-align:middle;margin-right:8px;"></span>Iced Coffee</span><span class="extras-price">₹195</span></div>
+      <div class="extras-row"><span class="extras-name"><span class="veg-marker" style="display:inline-flex;vertical-align:middle;margin-right:8px;"></span>Cold Brew</span><span class="extras-price">₹225</span></div>
+      <div class="extras-row"><span class="extras-name"><span class="veg-marker" style="display:inline-flex;vertical-align:middle;margin-right:8px;"></span>Iced Tea (Peach / Lemon)</span><span class="extras-price">₹195</span></div>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">LOFT</div>
+  <div class="footer-note">
+    Please let your server know about your allergens and dietary requirements.<br>
+    All prices are inclusive of applicable taxes.
+  </div>
+  <div class="clock-tower-note">A Clock Tower Property · Third Venue</div>
+</footer>
+
+<script>
+  function showSection(id) {
+    document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function openMenuOverlay() {
+    document.getElementById('menuOverlay').classList.add('open');
+  }
+
+  function closeMenuOverlay() {
+    document.getElementById('menuOverlay').classList.remove('open');
+  }
+
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('menuOverlay')) closeMenuOverlay();
+  }
+
+  function selectFromDrawer(id) {
+    closeMenuOverlay();
+    document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    const tabs = document.querySelectorAll('.nav-tab');
+    const sectionMap = ['breakfast','salads','small-plates','large-plates','quick-bites','grill','bowls','curry','pasta','pizza','desserts','tea-coffee'];
+    const idx = sectionMap.indexOf(id);
+    if (idx > -1 && tabs[idx]) tabs[idx].classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
